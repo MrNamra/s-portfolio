@@ -7,4 +7,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
-Route::get('/portfolio', [PortfolioController::class, 'ApiIndex']);
+Route::get('/portfolio', [PortfolioController::class, 'ApiIndex'])->name('api.portfolip');
