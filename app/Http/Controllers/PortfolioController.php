@@ -15,6 +15,10 @@ class PortfolioController extends Controller
         if($id) {
             $portfolio = Portfolio::findOrFail($id);
         }
+        if($request->ajax()) {
+            $data = Portfolio::select(['id', 'coverpic', 'info'])->find($id);
+            return response()->json($data);
+        }
         return view('portfolio', compact('portfolio'));
     }
     public function ApiIndex(Request $request)

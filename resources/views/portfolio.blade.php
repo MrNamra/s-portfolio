@@ -48,15 +48,13 @@
         </div>
     @endif
 </x-app-layout>
+</script>
 <script>
     $(document).ready(function() {
-        new FroalaEditor("#information", {
-            imageUploadURL: '{{route("upload-image")}}',
-            imageUploadParams: {
-                _token: '{{ csrf_token() }}'
-            },
-            imageAllowedTypes: ['jpeg', 'jpg', 'png', 'gif'],
-            imageMaxSize: 2 * 1024 * 1024,
+        tinymce.init({
+            selector: 'textarea',
+            // plugins: 'code table lists',
+            // toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table'
         });
 
         $('#datatable').DataTable({
@@ -79,7 +77,19 @@
                         return `<img src="${data}" width="80" height="60"/>`;
                     }
                 },
-                { data: 'info' },
+                {
+                    data: 'info',
+                    render: function(data, type, row) {
+                        if (typeof data === 'string') {
+                            let words = data.split(/\s+/);
+                            if (words.length > 10) {
+                                return words.slice(0, 10).join(' ') + '...';
+                            }
+                            return data;
+                        }
+                        return '';
+                    }
+                },
                 {
                     data: 'id',
                     render: function(data, type, row){
