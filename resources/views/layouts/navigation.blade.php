@@ -10,10 +10,10 @@
                     <x-nav-link :href="route('portfolio')" :active="request()->routeIs('portfolio')">
                         {{ __('Portfolio') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <!-- <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Blogs') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    </x-nav-link> -->
+                    <x-nav-link :href="route('feedback')" :active="request()->routeIs('feedback')">
                         {{ __('Feedbacks') }}
                     </x-nav-link>
                 </div>

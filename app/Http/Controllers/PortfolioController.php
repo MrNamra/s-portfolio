@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Portfolio;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class PortfolioController extends Controller
 {
@@ -84,7 +85,7 @@ class PortfolioController extends Controller
             return redirect()->back()->with('success', 'Portfolio created successfully!');
             
         } catch (\Exception $e) {
-            \Log::error("PortfolioController/store Error: " . $e->getMessage());
+            \Log::error("PortfolioController/edit Error: " . $e->getMessage());
             return redirect()->back()->with('error', 'Something went wrong.' .$e);
         }
     }
@@ -111,5 +112,39 @@ class PortfolioController extends Controller
         }
     
         return response()->json(['error' => 'No file uploaded'], 400);
+    }
+
+    public function contect(Request $request)
+    {
+        try{
+            $validated = $request->validate([
+                'name' => 'required|string|max:100',
+                'email' => 'required|email|max:100',
+                'message' => 'required|string|max:1000',
+            ]);
+
+            $name = $request->name;
+            $email = $request->email;
+            $message = $request->message;
+
+            $to = 'sKl4P@example.com';
+            $subject = "SomeOne Contact You From Portfolio";
+            $body = "Name: " . $name . "\nEmail: " . $email . "\nMessage: " . $message;
+
+            $a= Mail::raw($body, function ($mail) use ($to, $subject, $email, $name) {
+                $mail->to($to)
+                     ->subject($subject)
+                     ->replyTo($email, $name);
+            });
+            return response()->json(['status' => true, 'message' => 'Message sent successfully.']);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Internal server error.',
+            ], 422);
+        } catch (Exception $e) {
+            \Log::error("PortfolioController/contect Error: " . $e->getMessage());
+            return response()->json(['status' => false, 'message' => 'Something went wrong.']);
+        }
     }
 }
