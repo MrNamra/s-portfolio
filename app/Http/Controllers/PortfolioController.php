@@ -70,7 +70,7 @@ class PortfolioController extends Controller
                 $file = $request->file('coverphoto');
                 $fileName = time() . '.' . $file->getClientOriginalExtension();
                 $file->move(public_path('images'), $fileName);
-                $filePath = url('images/' . $fileName);
+                $filePath = url('public/images/' . $fileName);
             }
     
             $portfolio = Portfolio::findorFail($request->input('id'));
