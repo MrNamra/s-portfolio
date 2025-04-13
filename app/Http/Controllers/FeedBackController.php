@@ -50,25 +50,17 @@ class FeedBackController extends Controller
             $base64Image = null;
 
             if ($request->hasFile('coverphoto')) {
-                $image = $request->file('coverphoto');
-                if ($request->hasFile('coverphoto')) {
-                    $image = $request->file('coverphoto');
-                    $resizedImage = Image::make($image)->resize(100, 100)->encode($image->getClientOriginalExtension());
-                    $base64Image = 'data:' . $image->getClientMimeType() . ';base64,' . base64_encode($resizedImage);
-                }
-                // Resize image to 100x100
-                $resizedImage = Image::make($image)->resize(100, 100)->encode($image->getClientOriginalExtension());
-                $base64Image = 'data:' . $image->getClientMimeType() . ';base64,' . base64_encode($resizedImage);
+                $imageFile = $request->file('coverphoto');
+                $image = Image::read($imageFile->getRealPath())->resize(100, 100)->toJpeg();
+                $base64Image = 'data:image/jpeg;base64,' . base64_encode((string) $image);
             }
 
             if (!$base64Image) {
                 return redirect()->back()->with('error', 'Image not uploaded!');
             }
 
-            $feedback = FeedBack::updateOrCreate(
-                [
-                    'id' => $request->input('id'),
-                ],
+            FeedBack::updateOrCreate(
+                ['id' => $request->input('id')],
                 [
                     'name' => $request->input('name'),
                     'deg' => $request->input('des'),
@@ -96,20 +88,14 @@ class FeedBackController extends Controller
             $base64Image = null;
 
             if ($request->hasFile('coverphoto')) {
-                $image = $request->file('coverphoto');
-                if ($request->hasFile('coverphoto')) {
-                    $image = $request->file('coverphoto');
-                    $resizedImage = Image::make($image)->resize(100, 100)->encode($image->getClientOriginalExtension());
-                    $base64Image = 'data:' . $image->getClientMimeType() . ';base64,' . base64_encode($resizedImage);
-                }
-                $resizedImage = Image::make($image)->resize(100, 100)->encode($image->getClientOriginalExtension());
-                $base64Image = 'data:' . $image->getClientMimeType() . ';base64,' . base64_encode($resizedImage);
+                $imageFile = $request->file('coverphoto');
+                $image = Image::read($imageFile->getRealPath())->resize(100, 100)->toJpeg();
+                $base64Image = 'data:image/jpeg;base64,' . base64_encode((string) $image);
             }
 
             $portfolio = FeedBack::findOrFail($request->input('id'));
             $show = ($request->show)?1:0;
 
-            // Update only if image was uploaded
             if ($base64Image) {
                 $portfolio->img = $base64Image;
             }
