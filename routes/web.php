@@ -26,6 +26,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/edit-portfolio', [PortfolioController::class, 'edit'])->name('portfolio.edit');
     Route::post('/delete-portfolio', [PortfolioController::class, 'delete'])->name('portfolio.delete');
 
+    Route::get('/about-me', [PortfolioController::class, 'aboutMe'])->name('aboutMe');
+    Route::post('/about-me', [PortfolioController::class, 'aboutMeEdit'])->name('aboutMe.edit');
+
     Route::post('/upload', [PortfolioController::class, 'upoadImage'])->name('upload-image');
 });
 

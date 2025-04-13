@@ -6,6 +6,7 @@ use App\Models\Portfolio;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class PortfolioController extends Controller
 {
@@ -89,7 +90,6 @@ class PortfolioController extends Controller
             return redirect()->back()->with('error', 'Something went wrong.' .$e);
         }
     }
-
     public function delete(Request $request)
     {
         $portfolio = Portfolio::find($request->id);
@@ -98,7 +98,6 @@ class PortfolioController extends Controller
             return response()->json(['status' => 'success']);
         }
     }
-
     public function upoadImage(Request $request)
     {
         if($request->hasFile('file')) {
@@ -113,7 +112,6 @@ class PortfolioController extends Controller
     
         return response()->json(['error' => 'No file uploaded'], 400);
     }
-
     public function contect(Request $request)
     {
         try{
@@ -146,5 +144,20 @@ class PortfolioController extends Controller
             \Log::error("PortfolioController/contect Error: " . $e->getMessage());
             return response()->json(['status' => false, 'message' => 'Something went wrong.']);
         }
+    }
+    public function aboutMe()
+    {
+        $about = Storage::get('about.txt');
+        return view('about', compact('about'));
+    }
+    public function ApiAbout()
+    {
+        $data = Storage::get('about.txt');
+        return response()->json($data);
+    }
+    public function aboutMeEdit(Request $request)
+    {
+        Storage::put('about.txt', $request->about);
+        return redirect()->back()->with('success', 'About updated successfully!');
     }
 }
