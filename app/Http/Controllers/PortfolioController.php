@@ -127,7 +127,7 @@ class PortfolioController extends Controller
             $email = $request->email;
             $message = $request->message;
 
-            $to = 'sKl4P@example.com';
+            $to = env('MAIL_TO_ADDRESS');
             $subject = "SomeOne Contact You From Portfolio";
             $body = "Name: " . $name . "\nEmail: " . $email . "\nMessage: " . $message;
 
