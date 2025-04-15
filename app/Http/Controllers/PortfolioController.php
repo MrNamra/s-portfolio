@@ -25,7 +25,7 @@ class PortfolioController extends Controller
     }
     public function ApiIndex(Request $request)
     {
-        $data = Portfolio::select(['id', 'coverpic', 'info'])->orderBy('created_at', 'desc')->paginate(10);
+        $data = Portfolio::select(['id', 'coverpic', 'info'])->orderBy('display_order', 'asc')->paginate(10);
         return response()->json($data);
     }
     public function store(Request $request)
@@ -81,6 +81,21 @@ class PortfolioController extends Controller
                 $portfolio->coverpic = $filePath;
             }
             $portfolio->info = $request->input('information');
+            
+            if ($request->has('display_order')) {
+                $newOrder = $request->input('display_order');
+
+                if ($portfolio->display_order != $newOrder) {
+                    
+                    if ($portfolio->display_order < $newOrder) {
+                        Portfolio::where('display_order', '>', $portfolio->display_order)->where('display_order', '<=', $newOrder)->decrement('display_order');
+                    } else {
+                        Portfolio::where('display_order', '>=', $newOrder)->where('display_order', '<', $portfolio->display_order)->increment('display_order');
+                    }
+                    
+                    $portfolio->display_order = $newOrder;
+                }
+            }
             $portfolio->save();
 
             return redirect()->back()->with('success', 'Portfolio created successfully!');

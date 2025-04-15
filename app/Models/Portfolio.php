@@ -12,4 +12,16 @@ class Portfolio extends Model
         'coverpic',
         'info',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($portfolio) {
+            if (is_null($portfolio->display_order)) {
+                $maxOrder = Portfolio::max('display_order');
+                $portfolio->display_order = ($maxOrder)? $maxOrder + 1 : 1;
+            }
+        });
+    }
 }

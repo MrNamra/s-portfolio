@@ -11,6 +11,10 @@
                 <div class="p-6 text-gray-900">
                     @if($portfolio)
                         <form method="POST" action="{{route('portfolio.edit')}}" enctype="multipart/form-data">
+                            <div class="col-2">
+                                <lable>Index Number</lable>
+                                <input type="number" name="display_order" value="{{$portfolio ? $portfolio->display_order : 'null'}}" class="mt-3 mb-3 col-2 form-control" />
+                            </div>
                     @else
                         <form method="POST" action="{{route('portfolio.store')}}" enctype="multipart/form-data">
                     @endif
@@ -19,9 +23,11 @@
                         <input type="hidden" name="id" value="{{$portfolio ? $portfolio->id : 'null'}}" class="mt-3 mb-3 form-control" />
                         <input type="file" name="coverphoto" class="mt-3 mb-3 form-control" />
                         <hr />
-                        <lable class="mt-3">Infomation</lable>
-                        <textarea class="form-control mt-3 mb-3" name="information" id="information">{{$portfolio ? $portfolio->info : ''}}</textarea>
-                        <button type="submit" class="btn btn-primary">Upload</button>
+                        <div>
+                            <lable class="mt-3">Infomation</lable>
+                            <textarea class="form-control mt-3 mb-3" name="information" id="information">{{$portfolio ? $portfolio->info : ''}}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Upload</button>
                     </form>
                 </div>
             </div>
@@ -48,7 +54,11 @@
         </div>
     @endif
 </x-app-layout>
-</script>
+<style>
+    .tox-statusbar__branding {
+        display: none;
+    }
+</style>
 <script>
     $(document).ready(function() {
         tinymce.init({
