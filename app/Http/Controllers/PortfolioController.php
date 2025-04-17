@@ -25,10 +25,10 @@ class PortfolioController extends Controller
     }
     public function ApiIndex(Request $request)
     {
-        $start = $request->input('start');
-        $length = $request->input('length');
-        $draw = $request->input('draw');
-        $searchValue = $request->input('search.value');
+        $start = $request->input('start')??0;
+        $length = $request->input('length')??30;
+        $draw = $request->input('draw')??1;
+        $searchValue = $request->input('search.value')??null;
         
         $query = Portfolio::select(['id', 'coverpic', 'info'])->orderBy('display_order', 'asc');
 
