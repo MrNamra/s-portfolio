@@ -28,8 +28,16 @@ class PortfolioController extends Controller
         $start = $request->input('start');
         $length = $request->input('length');
         $draw = $request->input('draw');
-
+        $searchValue = $request->input('search.value');
+        
         $query = Portfolio::select(['id', 'coverpic', 'info'])->orderBy('display_order', 'asc');
+
+        if (!empty($searchValue)) {
+            $query->where(function ($q) use ($searchValue) {
+                $q->where('info', 'LIKE', "%{$searchValue}%")
+                    ->orWhere('display_order', 'LIKE', "%{$searchValue}%");
+            });
+        }
 
         $total = $query->count();
 
