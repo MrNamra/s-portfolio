@@ -26,7 +26,12 @@ class PortfolioController extends Controller
     public function ApiIndex(Request $request)
     {
         $data = Portfolio::select(['id', 'coverpic', 'info'])->orderBy('display_order', 'asc')->paginate(10);
-        return response()->json($data);
+        return response()->json([
+            'draw' => intval($request->input('draw')),
+            'recordsTotal' => $data->total(),
+            'recordsFiltered' => $data->total(),
+            'data' => $data->items(),
+        ]);
     }
     public function store(Request $request)
     {
