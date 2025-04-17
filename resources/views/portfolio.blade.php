@@ -69,7 +69,7 @@
 
         $('#datatable').DataTable({
             processing: true,
-            serverSide: false,
+            serverSide: true,
             ajax: {
                 url: '{{route("api.portfolip")}}',
                 dataSrc: 'data'
